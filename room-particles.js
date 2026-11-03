@@ -275,7 +275,6 @@
     function positionButtons(){for(const key of Object.keys(buttons)){const [x,y,w,h]=clusterRects[key],b=buttons[key];b.style.left=(ox+x*fit)+'px';b.style.top=(oy+y*fit)+'px';b.style.width=w*fit+'px';b.style.height=h*fit+'px';b.style.pointerEvents=active?'none':'auto';}}
     for(const key of ['serious','fun','neuro']){
       const button=document.createElement('button');button.type='button';button.className='scene-hotspot';button.dataset.zone=key;button.setAttribute('aria-label',`Explore ${key==='fun'?'just-for-fun':key==='neuro'?'neuroscience':'serious'} projects`);
-      const label=document.createElement('span');label.className='hotspot-label';label.textContent=LABELS[key];button.appendChild(label);
       if(key==='fun')button.style.clipPath='polygon(5% 0,90% 0,100% 76%,82% 100%,64% 92%,66% 70%,0 76%)';
       if(key==='serious')button.style.clipPath='polygon(0 10%,85% 0,100% 78%,82% 100%,10% 98%)';
       if(key==='neuro')button.style.clipPath='polygon(8% 16%,74% 0,93% 0,100% 40%,95% 88%,11% 100%,0 55%)';
