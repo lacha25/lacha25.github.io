@@ -11,7 +11,7 @@
     holder.appendChild(canvas);
     const ctx = canvas.getContext('2d', { alpha: false });
     const media = matchMedia('(prefers-reduced-motion: reduce)');
-    const particles = [], wires = [], features = [], buttons = {}, dust = [], stars = [];
+    const particles = [], wires = [], buttons = {}, dust = [], stars = [];
     let seed = 8726381;
     function rand() { seed ^= seed << 13; seed ^= seed >>> 17; seed ^= seed << 5; return (seed >>> 0) / 4294967296; }
     const lerp = (a, b, t) => a + (b - a) * t;
@@ -28,8 +28,8 @@
       const c = accent || (rand() < .17 ? PALETTE[2 + Math.floor(rand()*4)] : PALETTE[rand() < .2 ? 1 : 0]);
       particles.push({ x,y,z, g:group, c, a:isBrain ? .76+rand()*.24 : brightness*(.43+rand()*.57), s:Math.max(3.8,size*1.62)*(.92+rand()*.16), flicker:rand()*6.28 });
     }
-    function wire(points, color='#e5f5f4', opacity=.22, width=.65, front=false) {
-      (front ? features : wires).push({ p:points, c:color, a:opacity, w:width, g:group });
+    function wire(points, color='#e5f5f4', opacity=.22, width=.65) {
+      wires.push({ p:points, c:color, a:opacity, w:width, g:group });
     }
     function edge(a,b,accent=null,spacing=5.8) {
       const n=Math.max(1,Math.ceil(length(sub(b,a))/spacing));
@@ -180,15 +180,6 @@
     for(let i=headStart;i<particles.length;i++){
       const p=particles[i];p.a*=p.x>416&&p.y>190?.14:.86;
     }
-    // The skull silhouette encloses the face and the inset brain in the same volume.
-    const view=point(.157036*65,.316264*38,.932756*56),n=mul(view,1/length(view));
-    const u0=point(n.z,0,-n.x),u=mul(u0,1/length(u0));
-    const v=point(n.y*u.z-n.z*u.y,n.z*u.x-n.x*u.z,n.x*u.y-n.y*u.x),skullRim=[];
-    for(let t=0;t<=Math.PI*2+.04;t+=.06){
-      const q=add(mul(u,Math.cos(t)),mul(v,Math.sin(t)));
-      skullRim.push(point(410+65*q.x,193+38*q.y,538+56*q.z));
-    }
-    wire(skullRim,'#cbdde6',.5,.8,true);
     // Blanketed body. Vary the height continuously so the cloud reads as cloth.
     for(let x=-162;x<=272;x+=10.1)for(let z=382;z<=701;z+=10.1){if(rand()>.61)continue;const y=132+Math.sin((z-382)/319*Math.PI)*12+Math.sin((x+162)*.035)*2.7;tile(x,y,z,.49,null,2.9);}
     plane(point(-162,78,707),point(273,78,707),point(-162,132,707),9.8,.52,.24);
@@ -196,13 +187,6 @@
     // Fold across the chest, plus a few regular, unbroken longitudinal ridges.
     for(let z=382;z<=701;z+=6.2)tile(269,145+Math.sin((z-382)/319*Math.PI)*7,z,.95,rand()<.12?'#b9dfe1':null,2.7);
     for(let z=415;z<690;z+=53){const ps=[];for(let x=-150;x<250;x+=10)ps.push(point(x,146+Math.sin((x+162)*.035)*2.7,z));wire(ps,'#c4dde8',.18,.7);}
-    // Two closed eyes, centered nose and mouth: symmetric top-facing facial features.
-    for(const side of [-1,1]){
-      const ps=[];for(let i=0;i<=16;i++){const t=-1+i/8;ps.push(point(407-5*(1-t*t),227,538+side*19+t*8.5));}
-      wire(ps,'#02040a',1,5.8,true);wire(ps,'#c1e9f2',.8,.95,true);
-    }
-    wire([point(394,229,538),point(383,229,538),point(383,228,543)],'#b3d8e0',.8,.9,true);
-    const mouth=[];for(let i=0;i<=12;i++){const t=-1+i/6;mouth.push(point(372-2.5*(1-t*t),224,538+t*10.5));}wire(mouth,'#03060a',1,3.2,true);wire(mouth,'#d8c4ee',.8,.75,true);
     // Two hemispheres sit inside the cranium, behind the sleeping face.
     const brainStart=particles.length;
     const brainColor=() => rand()<.48?'#ffc0df':rand()<.58?'#ddc6ff':'#fff0fa';
@@ -227,6 +211,24 @@
     for(let i=0;i<125;i++)stars.push({x:35+rand()*1530,y:25+rand()*980,s:rand()<.06?2:1,a:.1+rand()*.34,t:rand()*6.28});
     for(let i=0;i<260;i++){
       const p=particles[Math.floor(rand()*particles.length)];dust.push({x:p.x+(rand()-.5)*65,y:p.y+(rand()-.4)*40,z:p.z+(rand()-.5)*60,g:p.g,s:1+rand()*1.2,a:.13+rand()*.18,c:rand()<.2?'#9bcde3':'#e4edf1',t:rand()*6.28});
+    }
+    // Head and sleeping face share the room's small, drifting, depth-sorted dots.
+    const view=point(.157036*65,.316264*38,.932756*56),n=mul(view,1/length(view));
+    const u0=point(n.z,0,-n.x),u=mul(u0,1/length(u0));
+    const v=point(n.y*u.z-n.z*u.y,n.z*u.x-n.x*u.z,n.x*u.y-n.y*u.x);
+    for(let t=0;t<Math.PI*2;t+=.13){
+      const q=add(mul(u,Math.cos(t)),mul(v,Math.sin(t)));
+      tile(410+65*q.x,193+38*q.y,538+56*q.z,.72,'#cbdde6',2.5);
+    }
+    for(const side of [-1,1])for(let i=0;i<=4;i++){
+      const t=-1+i/2;
+      tile(407-5*(1-t*t),227,538+side*19+t*8.5,.9,'#c1e9f2',2.5);
+    }
+    edge(point(394,229,538),point(383,229,538),'#b3d8e0',5.5);
+    tile(383,228,543,.8,'#b3d8e0',2.5);
+    for(let i=0;i<=4;i++){
+      const t=-1+i/2;
+      tile(372-2.5*(1-t*t),224,538+t*10.5,.8,'#d8c4ee',2.5);
     }
     // Stable painter order makes the physical scene coherent while keeping each frame inexpensive.
     const deskYaw=28*Math.PI/180,deskCos=Math.cos(deskYaw),deskSin=Math.sin(deskYaw);
@@ -332,7 +334,6 @@
         drawDot(q.x,q.y,s);
       }
       if(camera.z<2){for(const p of dust){const q=project(p),drift=media.matches?0:Math.sin(driftTime*.00017+p.t)*2;ctx.globalAlpha=p.a*(hover&&hover!==p.g?.45:1);ctx.fillStyle=p.c;drawDot(q.x+camera.b*drift*fit,q.y+camera.d*drift*fit,p.s*fit*camera.z);}}
-      for(const w of features)drawWire(w,hover&&hover!==w.g?.6:1);
       ctx.globalAlpha=1;
     }
     raf=requestAnimationFrame(draw);
