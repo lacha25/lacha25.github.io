@@ -204,16 +204,23 @@
     wire([point(394,229,538),point(383,229,538),point(383,228,543)],'#b3d8e0',.8,.9,true);
     const mouth=[];for(let i=0;i<=12;i++){const t=-1+i/6;mouth.push(point(372-2.5*(1-t*t),224,538+t*10.5));}wire(mouth,'#03060a',1,3.2,true);wire(mouth,'#d8c4ee',.8,.75,true);
     // Two hemispheres sit inside the cranium, behind the sleeping face.
+    const brainStart=particles.length;
     const brainColor=() => rand()<.48?'#ffc0df':rand()<.58?'#ddc6ff':'#fff0fa';
     for(let i=0;i<8;i++){
       const t=i/8*6.28;ellipsoid(432+Math.cos(t)*12,207+Math.sin(t)*2,538+Math.sin(t)*18,14,8,13,.88,brainColor());
     }
     ellipsoid(432,210,538,19,9,22,.8,'#fff0fa');
-    const fissure=[];for(let x=411;x<=453;x+=2)fissure.push(point(x,219,538+Math.sin(x*.25)));
-    wire(fissure,'#3e294e',.95,1.6,true);wire(fissure,'#d1a8eb',.72,.5,true);
-    for(const side of [-1,1])for(let j=0;j<3;j++){
-      const ps=[];for(let t=-1;t<=1;t+=.1)ps.push(point(418+j*13+Math.sin(t*4+j)*3,218,538+side*(7+(t+1)*8)));
-      wire(ps,'#493051',.92,1.2,true);wire(ps,'#d8a9eb',.7,.45,true);
+    // Suggest folds with shaded surface dots, sharing the brain's depth and motion.
+    for(let i=brainStart;i<particles.length;i++){
+      const p=particles[i];
+      if(p.y<211)continue;
+      let distance=Math.abs(p.z-538-Math.sin(p.x*.25));
+      const sideDistance=Math.abs(p.z-538);
+      if(sideDistance>=7&&sideDistance<=23){
+        const t=(sideDistance-7)/8-1;
+        for(let j=0;j<3;j++)distance=Math.min(distance,Math.abs(p.x-418-j*13-Math.sin(t*4+j)*3));
+      }
+      if(distance<2.1){p.c='#b794c9';p.a*=.72;p.s*=.9;}
     }
 
     // Deliberate, sparse debris and stars; black space remains the dominant background.
