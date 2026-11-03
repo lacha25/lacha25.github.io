@@ -15,7 +15,7 @@
   const setRoomInert = value => document.querySelectorAll('.topbar, #main, .site-footer, .skip-link').forEach(node => { node.inert = value; });
 
   function projectMarkup(project) {
-    return `<article class="project"><div class="project-heading"><h3>${escape(project.title)}</h3><span class="project-year">${escape(project.year)}</span></div>${project.context ? `<p class="project-context">${escape(project.context)}</p>` : ''}<p class="project-description">${escape(project.description)}</p>${project.details ? `<ul>${project.details.map(item=>`<li>${escape(item)}</li>`).join('')}</ul>` : ''}<p class="project-tools">${escape(project.tools)}</p>${project.links ? `<div class="project-actions">${project.links.filter(link=>external(link.url)).map(link=>`<a href="${escape(link.url)}" target="_blank" rel="noopener noreferrer">${escape(link.label)} <span aria-hidden="true">↗</span></a>`).join('')}</div>` : ''}</article>`;
+    return `<article class="project"><div class="project-heading"><h3>${escape(project.title)}</h3>${project.year ? `<span class="project-year">${escape(project.year)}</span>` : ''}</div>${project.context ? `<p class="project-context">${escape(project.context)}</p>` : ''}<p class="project-description">${escape(project.description)}</p>${project.details ? `<ul>${project.details.map(item=>`<li>${escape(item)}</li>`).join('')}</ul>` : ''}${project.tools ? `<p class="project-tools">${escape(project.tools)}</p>` : ''}${project.links ? `<div class="project-actions">${project.links.filter(link=>external(link.url)).map(link=>`<a href="${escape(link.url)}" target="_blank" rel="noopener noreferrer">${escape(link.label)} <span aria-hidden="true">↗</span></a>`).join('')}</div>` : ''}</article>`;
   }
 
   function toolMarkup(slugs) {
