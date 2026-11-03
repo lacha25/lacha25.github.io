@@ -27,7 +27,7 @@ window.PORTFOLIO = {
       {title:'wAI',description:'A local tool for exploring sentiment, response times, and conversation patterns in Instagram message exports, using rule-based metrics and confidence indicators.',tools:'Python · Streamlit'},
       {title:'Cooking',description:'A personal recipe manager for keeping recipes, cooking ideas, and techniques together, with a chat-based culinary assistant.',tools:'JavaScript · React · Node.js · Express'},
       {title:'Moment',description:'Co-designing and developing a productivity app that rewards completed work blocks in-game to help build a regular work habit.',tools:'Kotlin · Jetpack Compose'},
-      {title:'Cucumber Jump',description:'A mobile game.'}
+      {title:'Cucumber Jump',description:'A 2D mobile game where you rotate a cucumber through randomly assembled obstacle courses, collect coins, and unlock skins.',tools:'C# · Unity · 2D physics'}
     ]
   }
 };
