@@ -26,8 +26,12 @@ h1 { font-family:inherit; font-weight:600; font-size:clamp(60px,7.2vw,104px); li
 .scene-hotspot { position:absolute; display:block; border:0; padding:0; background:transparent; cursor:pointer; z-index:2; border-radius:20%; }
 .scene-hotspot:focus-visible { outline:1px solid #ffffff80; outline-offset:9px; }
 .room-navigation { position:absolute; z-index:3; bottom:50px; right:3.6vw; display:flex; gap:22px; align-items:center; transition:opacity .25s; }
-.collection-link { background:none; border:0; padding:8px 0; font-size:13px; display:flex; gap:9px; align-items:center; color:#c5c8ce; min-height:40px; }
-.collection-link:hover { color:#eee; }
+.collection-link { background:none; border:0; padding:8px 0; font-size:13px; display:flex; gap:9px; align-items:center; color:#c5c8ce; min-height:40px; transition:color .18s,opacity .18s; }
+.collection-link:hover { color:#fff; }
+#main:has([data-scene-hover]:not([data-scene-hover=""])) .collection-link { opacity:.65; }
+#main:has([data-scene-hover="neuro"]) .collection-link[data-open="neuro"],
+#main:has([data-scene-hover="serious"]) .collection-link[data-open="serious"],
+#main:has([data-scene-hover="fun"]) .collection-link[data-open="fun"] { opacity:1; color:#fff; }
 .site-footer { position:absolute; z-index:3; bottom:0; left:0; right:0; padding:20px 3.6vw 22px; display:flex; align-items:center; justify-content:flex-end; font-size:12px; color:#a4a9b4; transition:opacity .25s; }
 .site-footer a { color:#b8bcc5; }
 .site-footer a span { margin-left:4px; }

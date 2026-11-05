@@ -3,7 +3,7 @@
   'use strict';
   const W = 1600, H = 1050, DOT_SCALE = .7;
   const PALETTE = ['#f5f7fb', '#b8c4d4', '#646cff', '#39d6ff', '#a56cff', '#57dfa3'];
-  const LABELS = { serious: 'Serious projects', fun: 'Just for fun', neuro: 'Neuroscience' };
+  const LABELS = { serious: 'Engineering', fun: 'Playground', neuro: 'Neuroscience' };
   function createParticleRoom(holder, options = {}) {
     const canvas = document.createElement('canvas');
     canvas.className = 'particle-canvas';
@@ -276,7 +276,7 @@
     function resize(){const r=holder.getBoundingClientRect();width=Math.max(1,r.width);height=Math.max(1,r.height);dpr=Math.min(2,devicePixelRatio||1);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);canvas.style.width=width+'px';canvas.style.height=height+'px';fit=Math.min(width/W,height/H);ox=(width-W*fit)/2;oy=(height-H*fit)/2;positionButtons();}
     function positionButtons(){for(const key of Object.keys(buttons)){const [x,y,w,h]=clusterRects[key],b=buttons[key];b.style.left=(ox+x*fit)+'px';b.style.top=(oy+y*fit)+'px';b.style.width=w*fit+'px';b.style.height=h*fit+'px';b.style.pointerEvents=active?'none':'auto';}}
     for(const key of ['serious','fun','neuro']){
-      const button=document.createElement('button');button.type='button';button.className='scene-hotspot';button.dataset.zone=key;button.setAttribute('aria-label',`Explore ${key==='fun'?'just-for-fun':key==='neuro'?'neuroscience':'serious'} projects`);
+      const button=document.createElement('button');button.type='button';button.className='scene-hotspot';button.dataset.zone=key;button.setAttribute('aria-label',`Explore ${LABELS[key]} projects`);
       if(key==='fun')button.style.clipPath='polygon(5% 0,90% 0,100% 76%,82% 100%,64% 92%,66% 70%,0 76%)';
       if(key==='serious')button.style.clipPath='polygon(0 10%,85% 0,100% 78%,82% 100%,10% 98%)';
       if(key==='neuro')button.style.clipPath='polygon(8% 16%,74% 0,93% 0,100% 40%,95% 88%,11% 100%,0 55%)';
@@ -294,8 +294,8 @@
       if(media.matches){camera={...target};return Promise.resolve();}
       return new Promise(resolve=>{transition={from:{...camera},to:target,start:performance.now(),duration,resolve};});
     }
-    function enter(key){if(!LABELS[key])return Promise.resolve();active=key;hover=key;pointer={x:0,y:0};parallax={x:0,y:0};positionButtons();return animateTo(focusFor(key),1120);}
-    function leave(){active=null;hover=null;pointer={x:0,y:0};parallax={x:0,y:0};const promise=animateTo({...homeCamera},900);promise.then(positionButtons);return promise;}
+    function enter(key){if(!LABELS[key])return Promise.resolve();active=key;setHover(key);pointer={x:0,y:0};parallax={x:0,y:0};positionButtons();return animateTo(focusFor(key),1120);}
+    function leave(){active=null;setHover(null);pointer={x:0,y:0};parallax={x:0,y:0};const promise=animateTo({...homeCamera},900);promise.then(positionButtons);return promise;}
     function drawWire(w,boost=1){ctx.beginPath();w.p.forEach((p,i)=>{const q=project(p,w.g);i?ctx.lineTo(q.x,q.y):ctx.moveTo(q.x,q.y);});ctx.strokeStyle=w.c;ctx.globalAlpha=w.a*boost;ctx.lineWidth=Math.max(.4,w.w*fit*Math.min(camera.z,3));ctx.stroke();}
     function drawDot(x,y,size){
       // Align to physical pixels so smaller dots stay crisp on high-density screens.

@@ -9,7 +9,7 @@ window.PORTFOLIO = {
     ]
   },
   serious: {
-    title: 'Serious projects', accent: '#b9dbd6',
+    title: 'Engineering', accent: '#b9dbd6',
     projects: [
       {title:'AI Scientist Harness & Benchmark',year:'2026 · ongoing',context:'ETH Zurich',description:'Developing an agent harness for the mechanical engineering department, with an exam-based evaluation pipeline.',tools:'AI agents · Evaluation · Research tooling'},
       {title:'Polymarket',context:'Personal',description:'A research project analysing Polymarket prediction markets and testing trading strategies in simulation.',details:['Processed price and order-book events through an asynchronous event queue.','Modelled limit-order fills, trading fees, and spreads in a simulated broker.'],tools:'Python · asyncio · WebSockets · NumPy'},
@@ -21,7 +21,7 @@ window.PORTFOLIO = {
     ]
   },
   fun: {
-    title: 'Just for fun', accent: '#beb9e7',
+    title: 'Playground', accent: '#beb9e7',
     projects: [
       {title:'PubCrawl — Crawl App',year:'2024',context:'A team hackathon build',description:'A mobile app for planning a pub crawl, with an interactive map and directions between stops. I contributed to the map and route interface.',tools:'TypeScript · React Native · Expo',links:[{label:'View the project',url:'https://github.com/Crawl-App/app-frontend'}]},
       {title:'RunMap',year:'2026',context:'Personal',description:'A transit planner that compares walking and running connections while respecting vehicle timetables, with an interactive map and a Google Maps companion extension.',tools:'Python · JavaScript · Google Routes API',links:[{label:'View the project',url:'https://github.com/lacha25/Running-Routes'}]},
